@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قارئ QR</title>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <style>
+        #reader {
+            width: 600px;
+            height: 400px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>قارئ QR</h1>
+    <div id="reader"></div>
+    <div id="result"></div>
+
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            // تحقق من محتوى QR
+            if (decodedText === "1") {
+                document.getElementById('result').innerText = "تم";
+            } else {
+                document.getElementById('result').innerText = "فشل";
+            }
+        }
+
+        function onScanError(errorMessage) {
+            // يمكنك استخدام هذا لتسجيل الأخطاء
+            console.warn(`خطأ في المسح: ${errorMessage}`);
+        }
+
+        const html5QrCode = new Html5Qrcode("reader");
+
+        // بدء المسح
+        html5QrCode.start(
+            { facingMode: "environment" }, // استخدام الكاميرا الخلفية
+            {
+                fps: 10,    // الإطارات في الثانية
+                qrbox: { width: 250, height: 250 } // حجم مربع QR
+            },
+            onScanSuccess,
+            onScanError)
+        .catch(err => {
+            console.error(`فشل بدء المسح: ${err}`);
+        });
+    </script>
+</body>
+</html>
